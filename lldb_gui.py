@@ -37,6 +37,16 @@ class Window:
         self.ui.run_exec.clicked.connect(self.run_exec)
         self.target = None
 
+        # init breakpoints table
+        self.ui.breakpoints.setColumnCount(4)
+        self.ui.breakpoints.setHorizontalHeaderLabels(
+            ["Id", "Name", "Module", "Locations"])
+        # set stretch
+        self.ui.breakpoints.horizontalHeader().setSectionResizeMode(
+            QHeaderView.Stretch)
+        self.ui.breakpoints.verticalHeader().setSectionResizeMode(
+            QHeaderView.Stretch)
+
     def attach_lldb(self):
         global debugger
         exec_path = self.ui.exec_path.toPlainText()
