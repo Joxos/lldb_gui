@@ -10,8 +10,18 @@
     <height>570</height>
    </rect>
   </property>
+  <property name="font">
+   <font>
+    <family>Consolas</family>
+    <pointsize>12</pointsize>
+   </font>
+  </property>
   <property name="windowTitle">
    <string>MainWindow</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>icon.jpg</normaloff>icon.jpg</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QGroupBox" name="groupBox">

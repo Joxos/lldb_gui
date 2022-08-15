@@ -4,7 +4,6 @@ from loguru import logger
 from PySide6.QtWidgets import *
 from PySide6.QtCore import QFile
 from PySide6.QtUiTools import QUiLoader
-from PySide6.QtGui import QIcon
 
 logger.debug("Try to get the path of lldb.py...")
 lldb_path = subprocess.run("lldb -P",
@@ -54,7 +53,6 @@ class Window:
 
 if __name__ == '__main__':
     app = QApplication([])
-    app.setWindowIcon(QIcon("icon.jpg"))
     w = Window()
     w.ui.show()
     app.exec()
