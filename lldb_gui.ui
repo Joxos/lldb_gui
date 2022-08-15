@@ -23,7 +23,7 @@
    </font>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>LLDB Debugger GUI</string>
   </property>
   <property name="windowIcon">
    <iconset>

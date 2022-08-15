@@ -124,7 +124,7 @@ class Window(QWidget):
         # change the status of some buttons
         self.ui.stop_exec.setEnabled(True)
         # log
-        logger.debug(f"Successfully run {self.exec_path}")
+        logger.debug(f"Successfully (re)run {self.exec_path}")
 
     # note that this isn't connected to a button
     def stop_process(self):
@@ -155,7 +155,6 @@ class Window(QWidget):
 if __name__ == "__main__":
     app = QApplication([], WindowFlags=QtCore.Qt.WindowStaysOnTopHint)
     w = Window()
-    w.setWindowTitle("LLDB Debugger GUI")
     w.ui.show()
     app.exec()
 """
