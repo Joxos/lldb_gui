@@ -26,10 +26,10 @@ def show_message(message):
     msgBox.exec()
 
 
-class Window:
+class Window(QWidget):
 
     def __init__(self):
-        super(Window, self).__init__()
+        super().__init__()
 
         qfile = QtCore.QFile("lldb_gui.ui")
         self.ui = QUiLoader().load(qfile)
@@ -47,6 +47,7 @@ class Window:
         self.ui.breakpoints.verticalHeader().setSectionResizeMode(
             QHeaderView.Stretch)
 
+    @QtCore.Slot()
     def attach_lldb(self):
         global debugger
         exec_path = self.ui.exec_path.toPlainText()
@@ -68,6 +69,7 @@ class Window:
         self.ui.attach_lldb.setText("Reattach")
         self.exec_path = exec_path
 
+    @QtCore.Slot()
     def run_exec(self):
         if self.target:
             self.process = self.target.LaunchSimple(None, None, os.getcwd())
@@ -80,5 +82,6 @@ class Window:
 if __name__ == "__main__":
     app = QApplication([], WindowFlags=QtCore.Qt.WindowStaysOnTopHint)
     w = Window()
+    w.setWindowTitle("LLDB Debugger GUI")
     w.ui.show()
     app.exec()
