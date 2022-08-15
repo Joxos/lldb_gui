@@ -42,8 +42,7 @@ class Window(QWidget):
         super().__init__()
 
         # load ui
-        qfile = QtCore.QFile("lldb_gui.ui")
-        self.ui = QUiLoader().load(qfile)
+        self.ui = QUiLoader().load(QtCore.QFile("lldb_gui.ui"))
 
         # init variables
         self.target = None
@@ -51,6 +50,7 @@ class Window(QWidget):
         self.base_path = self.ui.base_path.placeholderText()
         self.exec_path = ""
         self.full_path = self.base_path + self.exec_path
+        self.process = lldb.SBProcess()
 
         # init breakpoints table
         self.ui.breakpoints.setColumnCount(4)
@@ -65,6 +65,7 @@ class Window(QWidget):
         # connect
         self.ui.attach_lldb.clicked.connect(self.attach_lldb)
         self.ui.run_exec.clicked.connect(self.run_exec)
+        self.ui.stop_exec.clicked.connect(self.stop_exec)
 
     @QtCore.Slot()
     def attach_lldb(self):
@@ -83,8 +84,7 @@ class Window(QWidget):
         # verify executable file
         if not os.path.isfile(full_path):
             log_and_show_message(
-                f"{full_path} isn't a file. LLDB process is now the same as before."
-            )
+                f"{full_path} isn't a file. LLDB process not changed.")
             return
 
         # create target
@@ -93,7 +93,7 @@ class Window(QWidget):
         # LLDB failed to attach the target
         if not self.target:
             log_and_show_message(
-                f"LLDB failed to attach {full_path}. LLDB process is now the same as before."
+                f"LLDB failed to attach {full_path}. LLDB process not changes."
             )
 
         # update variables
@@ -101,29 +101,54 @@ class Window(QWidget):
         self.base_path = base_path
         self.full_path = full_path
 
-        # enable buttons
+        # enable some buttons
         self.ui.run_exec.setEnabled(True)
-        self.ui.stop_exec.setEnabled(True)
-        self.ui.step_into.setEnabled(True)
-        self.ui.step_over.setEnabled(True)
-        self.ui.continue_exec.setEnabled(True)
+        # self.ui.step_into.setEnabled(True)
+        # self.ui.step_over.setEnabled(True)
+        # self.ui.continue_exec.setEnabled(True)
         self.ui.add_breakpoint.setEnabled(True)
         # update attatch button to "Reattach"
         self.ui.attach_lldb.setText("Reattach")
 
+        # log
+        logger.debug(f"Succeeded to attach {full_path} to LLDB.")
+
     @QtCore.Slot()
     def run_exec(self):
-        if self.target:
-            self.process = self.target.LaunchSimple(None, None, os.getcwd())
-            logger.debug(f"Successfully run {self.exec_path}")
-            return
-        log_and_show_message("There isn't any target.")
+        # stop the process first everytime to reduce codes to detect whether started or not
+        self.stop_process()
+        # create process
+        self.process = self.target.LaunchSimple(None, None, os.getcwd())
+        # set start button to "Restart"
+        self.ui.run_exec.setText("Restart")
+        # change the status of some buttons
+        self.ui.stop_exec.setEnabled(True)
+        # log
+        logger.debug(f"Successfully run {self.exec_path}")
+
+    # note that this isn't connected to a button
+    def stop_process(self):
+        # destroy the process
+        self.process.Destroy()
+        logger.debug("Destroy process.")
+
+    # real stop_exec which connected to the button
+    @QtCore.Slot()
+    def stop_exec(self):
+        self.stop_process()
+        # change the status of some buttons
+        # convert restart button to "Start"
+        self.ui.run_exec.setText("Start")
+        self.ui.stop_exec.setEnabled(False)
+        # log
+        logger.debug("Stopped debugging.")
 
     @QtCore.Slot()
     def add_breakpoint(self):
         # messagebox to get data
         # create breakpoint and add it to self.breakpoints
         # redisplay self.ui.breakpoints
+        # log
         pass
 
 
