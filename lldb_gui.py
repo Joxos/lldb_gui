@@ -36,22 +36,26 @@ def log_and_show_message(message, level="error"):
         raise ValueError("level must be \"error\" or \"info\"")
 
 
+def load_ui(filename):
+    ui_file = QtCore.QFile(filename)
+    if not ui_file.open(QtCore.QIODevice.ReadOnly):
+        logger.error(f"Cannot open {ui_file_name}: {ui_file.errorString()}")
+        sys.exit(-1)
+    ui = QUiLoader().load(ui_file)
+    ui_file.close()
+    if not ui:
+        logger.error(f"Failed to load ui: {loader.errorString()}")
+        sys.exit(-1)
+    return ui
+
+
 class Window(QWidget):
 
     def __init__(self):
         super().__init__()
 
         # load ui
-        ui_file = QtCore.QFile("lldb_gui.ui")
-        if not ui_file.open(QtCore.QIODevice.ReadOnly):
-            logger.error(
-                f"Cannot open {ui_file_name}: {ui_file.errorString()}")
-            sys.exit(-1)
-        self.ui = QUiLoader().load(ui_file)
-        ui_file.close()
-        if not self.ui:
-            logger.error(f"Failed to load ui: {loader.errorString()}")
-            sys.exit(-1)
+        self.ui = load_ui("lldb_gui.ui")
 
         # init variables
         self.target = None
