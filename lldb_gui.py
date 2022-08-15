@@ -42,7 +42,16 @@ class Window(QWidget):
         super().__init__()
 
         # load ui
-        self.ui = QUiLoader().load(QtCore.QFile("lldb_gui.ui"))
+        ui_file = QtCore.QFile("lldb_gui.ui")
+        if not ui_file.open(QtCore.QIODevice.ReadOnly):
+            logger.error(
+                f"Cannot open {ui_file_name}: {ui_file.errorString()}")
+            sys.exit(-1)
+        self.ui = QUiLoader().load(ui_file)
+        ui_file.close()
+        if not self.ui:
+            logger.error(f"Failed to load ui: {loader.errorString()}")
+            sys.exit(-1)
 
         # init variables
         self.target = None
@@ -66,6 +75,7 @@ class Window(QWidget):
         self.ui.attach_lldb.clicked.connect(self.attach_lldb)
         self.ui.run_exec.clicked.connect(self.run_exec)
         self.ui.stop_exec.clicked.connect(self.stop_exec)
+        self.ui.add_breakpoint.clicked.connect(self.add_breakpoint)
 
     @QtCore.Slot()
     def attach_lldb(self):
