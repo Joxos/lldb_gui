@@ -2,7 +2,7 @@ import subprocess, sys, os
 from loguru import logger
 
 from PySide6.QtWidgets import *
-from PySide6.QtCore import QFile
+from PySide6 import QtCore
 from PySide6.QtUiTools import QUiLoader
 
 logger.debug("Try to get the path of lldb.py...")
@@ -31,7 +31,7 @@ class Window:
     def __init__(self):
         super(Window, self).__init__()
 
-        qfile = QFile("lldb_gui.ui")
+        qfile = QtCore.QFile("lldb_gui.ui")
         self.ui = QUiLoader().load(qfile)
         self.ui.attach_lldb.clicked.connect(self.attach_lldb)
         self.ui.run_exec.clicked.connect(self.run_exec)
@@ -68,7 +68,7 @@ class Window:
 
 
 if __name__ == "__main__":
-    app = QApplication([])
+    app = QApplication([], WindowFlags=QtCore.Qt.WindowStaysOnTopHint)
     w = Window()
     w.ui.show()
     app.exec()
