@@ -36,8 +36,8 @@ def log_and_show_message(message, level="error"):
         raise ValueError("level must be \"error\" or \"info\"")
 
 
-def load_ui(filename):
-    ui_file = QtCore.QFile(filename)
+def load_ui(file_name):
+    ui_file = QtCore.QFile(file_name)
     if not ui_file.open(QtCore.QIODevice.ReadOnly):
         logger.error(f"Cannot open {ui_file_name}: {ui_file.errorString()}")
         sys.exit(-1)
@@ -49,7 +49,25 @@ def load_ui(filename):
     return ui
 
 
-class Window(QWidget):
+class AddBreakpoint(QDialog):
+
+    def __init__(self):
+        super().__init__()
+
+        # load ui
+        self.ui = load_ui("add_breakpoint_new.ui")
+        self.ui.cancel.clicked.connect(self.window_close)
+
+    def window_close(self):
+        self.ui.close()
+        logger.debug("Add breakpoint canceled.")
+
+
+# definition of w_add_breakpoint which holds the window of add_breakpoint
+global w_add_breakpoint
+
+
+class MainWindow(QMainWindow):
 
     def __init__(self):
         super().__init__()
@@ -72,14 +90,14 @@ class Window(QWidget):
         # set stretch
         self.ui.breakpoints.horizontalHeader().setSectionResizeMode(
             QHeaderView.Stretch)
-        self.ui.breakpoints.verticalHeader().setSectionResizeMode(
-            QHeaderView.Stretch)
 
         # connect
         self.ui.attach_lldb.clicked.connect(self.attach_lldb)
         self.ui.run_exec.clicked.connect(self.run_exec)
         self.ui.stop_exec.clicked.connect(self.stop_exec)
         self.ui.add_breakpoint.clicked.connect(self.add_breakpoint)
+
+        self.ui.show()
 
     @QtCore.Slot()
     def attach_lldb(self):
@@ -159,17 +177,59 @@ class Window(QWidget):
 
     @QtCore.Slot()
     def add_breakpoint(self):
-        # messagebox to get data
-        # create breakpoint and add it to self.breakpoints
-        # redisplay self.ui.breakpoints
+        # configure trigger function
+        w_add_breakpoint.ui.add.clicked.connect(
+            w_main_window.trigger_add_breakpoint)
+        # show add window
+        w_add_breakpoint.ui.show()
+        # now the control is handled to that window
         # log
-        pass
+        logger.debug(
+            "Trigger add_breakpoint action and succeeded to pop the instruction window."
+        )
+
+    @QtCore.Slot()
+    def trigger_add_breakpoint(self):
+        # get the window of add_breakpoint
+        global w_add_breakpoint
+        # get current selected and create breakpoint
+        if w_add_breakpoint.ui.by_fn.isChecked():
+            logger.debug(
+                f"by_fn is checked. function_name={w_add_breakpoint.ui.function_name.text()}"
+            )
+            new_breakpoint = self.target.BreakpointCreateByName(
+                w_add_breakpoint.ui.function_name.text(),
+                self.target.GetExecutable().GetFilename())
+            self.breakpoints.append(new_breakpoint)
+            self.update_breakpoints_table()
+            logger.debug("Breakpoint created successfully.")
+        elif w_add_breakpoint.ui.by_ln.isChecked():
+            logger.debug(
+                f"by_ln is checked. file_name={w_add_breakpoint.ui.file_name.text()}, line_number={w_add_breakpoint.ui.line_number.text()}"
+            )
+            new_breakpoint = self.target.BreakpointCreateByLocation(
+                w_add_breakpoint.ui.file_name.text(),
+                w_add_breakpoint.ui.line_number.text())
+            self.breakpoints.append(new_breakpoint)
+            self.update_breakpoints_table()
+            logger.debug("Breakpoint created successfully.")
+        else:
+            logger.error("???")
+
+    def update_breakpoints_table(self):
+        # update row count
+        self.ui.breakpoints.setRowCount(len(self.breakpoints))
+        for i, brk in enumerate(self.breakpoints):
+            self.ui.breakpoints.setItem(
+                i, 0, QTableWidgetItem(self.breakpoints[i].id))
 
 
 if __name__ == "__main__":
-    app = QApplication([], WindowFlags=QtCore.Qt.WindowStaysOnTopHint)
-    w = Window()
-    w.ui.show()
+    app = QApplication(
+        [], WindowFlags=QtCore.Qt.WindowStaysOnTopHint)  # fix casade
+    # initialization of components must be after QApplication got initialize
+    w_add_breakpoint = AddBreakpoint()
+    w_main_window = MainWindow()
     app.exec()
 """
 Testing:
@@ -178,4 +238,5 @@ Testing:
    take a look at full_path in console
 3. correct path to an executable file
    then run it
+4. start, restart and stop
 """
