@@ -58,9 +58,28 @@ class AddBreakpoint(QDialog):
         self.ui = load_ui("add_breakpoint_new.ui")
         self.ui.cancel.clicked.connect(self.window_close)
 
+        # fn
+        self.ui.by_fn.clicked.connect(self.fn_clicked)
+
+        # ln
+        self.ui.by_ln.clicked.connect(self.ln_clicked)
+
+    @QtCore.Slot()
     def window_close(self):
         self.ui.close()
         logger.debug("Add breakpoint canceled.")
+
+    @QtCore.Slot()
+    def fn_clicked(self):
+        self.ui.file_name.setEnabled(False)
+        self.ui.line_number.setEnabled(False)
+        self.ui.function_name.setEnabled(True)
+
+    @QtCore.Slot()
+    def ln_clicked(self):
+        self.ui.file_name.setEnabled(True)
+        self.ui.line_number.setEnabled(True)
+        self.ui.function_name.setEnabled(False)
 
 
 # definition of w_add_breakpoint which holds the window of add_breakpoint

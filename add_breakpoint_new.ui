@@ -143,7 +143,7 @@
   </widget>
   <widget class="QLineEdit" name="function_name">
    <property name="enabled">
-    <bool>true</bool>
+    <bool>false</bool>
    </property>
    <property name="geometry">
     <rect>
@@ -179,102 +179,5 @@
   </widget>
  </widget>
  <resources/>
- <connections>
-  <connection>
-   <sender>by_fn</sender>
-   <signal>clicked()</signal>
-   <receiver>file_name</receiver>
-   <slot>hide()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>377</x>
-     <y>135</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>243</x>
-     <y>214</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>by_fn</sender>
-   <signal>clicked()</signal>
-   <receiver>line_number</receiver>
-   <slot>hide()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>429</x>
-     <y>135</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>248</x>
-     <y>255</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>by_ln</sender>
-   <signal>clicked()</signal>
-   <receiver>file_name</receiver>
-   <slot>show()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>137</x>
-     <y>136</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>161</x>
-     <y>204</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>by_ln</sender>
-   <signal>clicked()</signal>
-   <receiver>line_number</receiver>
-   <slot>show()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>206</x>
-     <y>134</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>212</x>
-     <y>255</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>by_ln</sender>
-   <signal>clicked()</signal>
-   <receiver>function_name</receiver>
-   <slot>hide()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>176</x>
-     <y>137</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>398</x>
-     <y>213</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>by_fn</sender>
-   <signal>clicked()</signal>
-   <receiver>function_name</receiver>
-   <slot>show()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>456</x>
-     <y>133</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>467</x>
-     <y>216</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>
