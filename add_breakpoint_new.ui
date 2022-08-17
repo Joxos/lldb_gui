@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>566</width>
-    <height>363</height>
+    <height>290</height>
    </rect>
   </property>
   <property name="font">
@@ -20,13 +20,13 @@
    </font>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Add Breakpoint</string>
   </property>
   <widget class="QPushButton" name="cancel">
    <property name="geometry">
     <rect>
      <x>300</x>
-     <y>300</y>
+     <y>220</y>
      <width>101</width>
      <height>31</height>
     </rect>
@@ -48,7 +48,7 @@
    <property name="geometry">
     <rect>
      <x>180</x>
-     <y>300</y>
+     <y>220</y>
      <width>101</width>
      <height>31</height>
     </rect>
@@ -70,9 +70,9 @@
    <property name="geometry">
     <rect>
      <x>80</x>
-     <y>129</y>
-     <width>141</width>
-     <height>21</height>
+     <y>39</y>
+     <width>151</width>
+     <height>31</height>
     </rect>
    </property>
    <property name="text">
@@ -85,10 +85,10 @@
   <widget class="QRadioButton" name="by_fn">
    <property name="geometry">
     <rect>
-     <x>340</x>
-     <y>129</y>
-     <width>171</width>
-     <height>21</height>
+     <x>330</x>
+     <y>39</y>
+     <width>181</width>
+     <height>31</height>
     </rect>
    </property>
    <property name="text">
@@ -99,7 +99,7 @@
    <property name="geometry">
     <rect>
      <x>60</x>
-     <y>170</y>
+     <y>80</y>
      <width>81</width>
      <height>16</height>
     </rect>
@@ -112,9 +112,9 @@
    <property name="geometry">
     <rect>
      <x>60</x>
-     <y>250</y>
+     <y>165</y>
      <width>81</width>
-     <height>16</height>
+     <height>21</height>
     </rect>
    </property>
    <property name="text">
@@ -125,9 +125,9 @@
    <property name="geometry">
     <rect>
      <x>150</x>
-     <y>250</y>
+     <y>160</y>
      <width>111</width>
-     <height>20</height>
+     <height>31</height>
     </rect>
    </property>
   </widget>
@@ -135,9 +135,9 @@
    <property name="geometry">
     <rect>
      <x>80</x>
-     <y>200</y>
+     <y>110</y>
      <width>181</width>
-     <height>20</height>
+     <height>31</height>
     </rect>
    </property>
   </widget>
@@ -148,33 +148,26 @@
    <property name="geometry">
     <rect>
      <x>330</x>
-     <y>200</y>
+     <y>110</y>
      <width>201</width>
-     <height>20</height>
+     <height>31</height>
     </rect>
    </property>
   </widget>
   <widget class="QLabel" name="label_3">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="geometry">
     <rect>
      <x>300</x>
-     <y>170</y>
+     <y>80</y>
      <width>131</width>
      <height>16</height>
     </rect>
    </property>
    <property name="text">
     <string>Function Name:</string>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="file_name_2">
-   <property name="geometry">
-    <rect>
-     <x>310</x>
-     <y>50</y>
-     <width>181</width>
-     <height>20</height>
-    </rect>
    </property>
   </widget>
  </widget>

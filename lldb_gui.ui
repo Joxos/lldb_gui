@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>598</width>
-    <height>431</height>
+    <width>816</width>
+    <height>389</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -296,8 +296,8 @@ hr { height: 1px; border-width: 0; }
      <rect>
       <x>20</x>
       <y>170</y>
-      <width>561</width>
-      <height>241</height>
+      <width>751</width>
+      <height>191</height>
      </rect>
     </property>
     <property name="font">
@@ -312,11 +312,23 @@ hr { height: 1px; border-width: 0; }
     <widget class="QTableWidget" name="breakpoints">
      <property name="geometry">
       <rect>
-       <x>10</x>
-       <y>60</y>
-       <width>541</width>
-       <height>171</height>
+       <x>120</x>
+       <y>30</y>
+       <width>621</width>
+       <height>141</height>
       </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Consolas</family>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
+     <property name="verticalScrollBarPolicy">
+      <enum>Qt::ScrollBarAlwaysOn</enum>
+     </property>
+     <property name="horizontalScrollBarPolicy">
+      <enum>Qt::ScrollBarAsNeeded</enum>
      </property>
      <property name="editTriggers">
       <set>QAbstractItemView::NoEditTriggers</set>
@@ -350,8 +362,8 @@ hr { height: 1px; border-width: 0; }
      </property>
      <property name="geometry">
       <rect>
-       <x>230</x>
-       <y>30</y>
+       <x>10</x>
+       <y>90</y>
        <width>101</width>
        <height>24</height>
       </rect>
@@ -372,8 +384,8 @@ hr { height: 1px; border-width: 0; }
      </property>
      <property name="geometry">
       <rect>
-       <x>340</x>
-       <y>30</y>
+       <x>10</x>
+       <y>120</y>
        <width>101</width>
        <height>24</height>
       </rect>
@@ -394,8 +406,8 @@ hr { height: 1px; border-width: 0; }
      </property>
      <property name="geometry">
       <rect>
-       <x>120</x>
-       <y>30</y>
+       <x>10</x>
+       <y>60</y>
        <width>101</width>
        <height>24</height>
       </rect>
@@ -416,8 +428,8 @@ hr { height: 1px; border-width: 0; }
      </property>
      <property name="geometry">
       <rect>
-       <x>450</x>
-       <y>30</y>
+       <x>10</x>
+       <y>150</y>
        <width>101</width>
        <height>24</height>
       </rect>

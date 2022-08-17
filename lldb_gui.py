@@ -73,13 +73,21 @@ class AddBreakpoint(QDialog):
     def fn_clicked(self):
         self.ui.file_name.setEnabled(False)
         self.ui.line_number.setEnabled(False)
+        self.ui.label.setEnabled(False)
+        self.ui.label_2.setEnabled(False)
+
         self.ui.function_name.setEnabled(True)
+        self.ui.label_3.setEnabled(True)
 
     @QtCore.Slot()
     def ln_clicked(self):
+        self.ui.function_name.setEnabled(False)
+        self.ui.label_3.setEnabled(False)
+
         self.ui.file_name.setEnabled(True)
         self.ui.line_number.setEnabled(True)
-        self.ui.function_name.setEnabled(False)
+        self.ui.label.setEnabled(True)
+        self.ui.label_2.setEnabled(True)
 
 
 # definition of w_add_breakpoint which holds the window of add_breakpoint
@@ -97,18 +105,28 @@ class MainWindow(QMainWindow):
         # init variables
         self.target = None
         self.breakpoints = []
-        self.base_path = self.ui.base_path.placeholderText()
+        self.base_path = ""
         self.exec_path = ""
-        self.full_path = self.base_path + self.exec_path
+        self.full_path = ""
         self.process = lldb.SBProcess()
 
         # init breakpoints table
         self.ui.breakpoints.setColumnCount(4)
         self.ui.breakpoints.setHorizontalHeaderLabels(
-            ["Id", "Name", "Module", "Locations"])
+            ["Id", "Location(s)", "Hit Count", "Target"])
+        self.ui.breakpoints.setColumnWidth(0, self.ui.breakpoints.width() / 4)
+        self.ui.breakpoints.setColumnWidth(1, self.ui.breakpoints.width() / 4)
+        self.ui.breakpoints.setColumnWidth(2, self.ui.breakpoints.width() / 4)
+        self.ui.breakpoints.setColumnWidth(3, self.ui.breakpoints.width() / 4)
+
+        self.ui.breakpoints.horizontalHeader().ResizeMode(
+            QHeaderView.Interactive)
+        self.ui.breakpoints.verticalHeader().ResizeMode(
+            QHeaderView.Interactive)
+
         # set stretch
-        self.ui.breakpoints.horizontalHeader().setSectionResizeMode(
-            QHeaderView.Stretch)
+        # self.ui.breakpoints.horizontalHeader().setSectionResizeMode(
+        #     QHeaderView.Stretch)
 
         # connect
         self.ui.attach_lldb.clicked.connect(self.attach_lldb)
@@ -123,13 +141,14 @@ class MainWindow(QMainWindow):
         # get variables
         global debugger
         base_path = self.ui.base_path.toPlainText()
+        logger.debug(f"Original base_path={base_path}")
         if len(base_path) > 0:
             if base_path[-1] not in ["\\", "/"]:
                 base_path += "/"
+        logger.debug(f"Fixed base_path={base_path}")
         exec_path = self.ui.exec_path.toPlainText()
         full_path = base_path + exec_path
-        logger.debug(f"Base path: {base_path}")
-        logger.debug(f"Exec path: {exec_path}")
+        logger.debug(f"exec_path={exec_path}")
         logger.debug(f"Full path: {full_path}")
 
         # verify executable file
@@ -144,7 +163,7 @@ class MainWindow(QMainWindow):
         # LLDB failed to attach the target
         if not self.target:
             log_and_show_message(
-                f"LLDB failed to attach {full_path}. LLDB process not changes."
+                f"LLDB failed to attach {full_path}. LLDB process not changed."
             )
 
         # update variables
@@ -154,9 +173,6 @@ class MainWindow(QMainWindow):
 
         # enable some buttons
         self.ui.run_exec.setEnabled(True)
-        # self.ui.step_into.setEnabled(True)
-        # self.ui.step_over.setEnabled(True)
-        # self.ui.continue_exec.setEnabled(True)
         self.ui.add_breakpoint.setEnabled(True)
         # update attatch button to "Reattach"
         self.ui.attach_lldb.setText("Reattach")
@@ -213,34 +229,44 @@ class MainWindow(QMainWindow):
         global w_add_breakpoint
         # get current selected and create breakpoint
         if w_add_breakpoint.ui.by_fn.isChecked():
-            logger.debug(
-                f"by_fn is checked. function_name={w_add_breakpoint.ui.function_name.text()}"
-            )
+            function_name = w_add_breakpoint.ui.function_name.text()
+
+            logger.debug(f"by_fn is checked. function_name={function_name}")
+
             new_breakpoint = self.target.BreakpointCreateByName(
-                w_add_breakpoint.ui.function_name.text(),
+                function_name,
                 self.target.GetExecutable().GetFilename())
             self.breakpoints.append(new_breakpoint)
             self.update_breakpoints_table()
             logger.debug("Breakpoint created successfully.")
         elif w_add_breakpoint.ui.by_ln.isChecked():
+            file_name = w_add_breakpoint.ui.file_name.text()
+            line_number = w_add_breakpoint.ui.line_number.text()
+
             logger.debug(
-                f"by_ln is checked. file_name={w_add_breakpoint.ui.file_name.text()}, line_number={w_add_breakpoint.ui.line_number.text()}"
+                f"by_ln is checked. file_name={file_name}, line_number={line_number}"
             )
+
             new_breakpoint = self.target.BreakpointCreateByLocation(
-                w_add_breakpoint.ui.file_name.text(),
-                w_add_breakpoint.ui.line_number.text())
+                lldb.SBFileSpec(self.full_path), line_number)
             self.breakpoints.append(new_breakpoint)
             self.update_breakpoints_table()
             logger.debug("Breakpoint created successfully.")
-        else:
-            logger.error("???")
+        w_add_breakpoint.ui.close()
 
     def update_breakpoints_table(self):
         # update row count
         self.ui.breakpoints.setRowCount(len(self.breakpoints))
         for i, brk in enumerate(self.breakpoints):
-            self.ui.breakpoints.setItem(
-                i, 0, QTableWidgetItem(self.breakpoints[i].id))
+            self.ui.breakpoints.setItem(i, 0, QTableWidgetItem(brk.id))
+            location_str = ""
+            for j in brk.locations:
+                location_str += str(j) + "\n"
+            self.ui.breakpoints.setItem(i, 1, QTableWidgetItem(location_str))
+            self.ui.breakpoints.setItem(i, 2,
+                                        QTableWidgetItem(brk.GetHitCount()))
+            self.ui.breakpoints.setItem(i, 3,
+                                        QTableWidgetItem(str(brk.GetTarget())))
 
 
 if __name__ == "__main__":
