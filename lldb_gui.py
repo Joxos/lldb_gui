@@ -55,7 +55,7 @@ class AddBreakpoint(QDialog):
         super().__init__()
 
         # load ui
-        self.ui = load_ui("add_breakpoint_new.ui")
+        self.ui = load_ui("add_breakpoint.ui")
         self.ui.cancel.clicked.connect(self.window_close)
 
         # fn
@@ -238,20 +238,22 @@ class MainWindow(QMainWindow):
                 self.target.GetExecutable().GetFilename())
             self.breakpoints.append(new_breakpoint)
             self.update_breakpoints_table()
-            logger.debug("Breakpoint created successfully.")
+            logger.info(f"New breakpoint: {str(new_breakpoint)}")
         elif w_add_breakpoint.ui.by_ln.isChecked():
             file_name = w_add_breakpoint.ui.file_name.text()
             line_number = w_add_breakpoint.ui.line_number.text()
-
             logger.debug(
                 f"by_ln is checked. file_name={file_name}, line_number={line_number}"
             )
-
             new_breakpoint = self.target.BreakpointCreateByLocation(
-                lldb.SBFileSpec(self.full_path), line_number)
+                file_name, int(line_number))
+            if not new_breakpoint:
+                log_and_show_message(
+                    f"{file_name}:{line_number} doesn't exsist!")
+                return
             self.breakpoints.append(new_breakpoint)
             self.update_breakpoints_table()
-            logger.debug("Breakpoint created successfully.")
+            logger.info(f"New breakpoint: {str(new_breakpoint)}")
         w_add_breakpoint.ui.close()
 
     def update_breakpoints_table(self):
@@ -259,14 +261,6 @@ class MainWindow(QMainWindow):
         self.ui.breakpoints.setRowCount(len(self.breakpoints))
         for i, brk in enumerate(self.breakpoints):
             self.ui.breakpoints.setItem(i, 0, QTableWidgetItem(brk.id))
-            location_str = ""
-            for j in brk.locations:
-                location_str += str(j) + "\n"
-            self.ui.breakpoints.setItem(i, 1, QTableWidgetItem(location_str))
-            self.ui.breakpoints.setItem(i, 2,
-                                        QTableWidgetItem(brk.GetHitCount()))
-            self.ui.breakpoints.setItem(i, 3,
-                                        QTableWidgetItem(str(brk.GetTarget())))
 
 
 if __name__ == "__main__":

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>816</width>
-    <height>389</height>
+    <width>784</width>
+    <height>426</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -297,7 +297,7 @@ hr { height: 1px; border-width: 0; }
       <x>20</x>
       <y>170</y>
       <width>751</width>
-      <height>191</height>
+      <height>231</height>
      </rect>
     </property>
     <property name="font">
@@ -315,7 +315,7 @@ hr { height: 1px; border-width: 0; }
        <x>120</x>
        <y>30</y>
        <width>621</width>
-       <height>141</height>
+       <height>191</height>
       </rect>
      </property>
      <property name="font">
@@ -343,7 +343,7 @@ hr { height: 1px; border-width: 0; }
        <x>10</x>
        <y>30</y>
        <width>101</width>
-       <height>24</height>
+       <height>31</height>
       </rect>
      </property>
      <property name="font">
@@ -363,9 +363,9 @@ hr { height: 1px; border-width: 0; }
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>90</y>
+       <y>110</y>
        <width>101</width>
-       <height>24</height>
+       <height>31</height>
       </rect>
      </property>
      <property name="font">
@@ -385,9 +385,9 @@ hr { height: 1px; border-width: 0; }
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>120</y>
+       <y>150</y>
        <width>101</width>
-       <height>24</height>
+       <height>31</height>
       </rect>
      </property>
      <property name="font">
@@ -407,9 +407,9 @@ hr { height: 1px; border-width: 0; }
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>60</y>
+       <y>70</y>
        <width>101</width>
-       <height>24</height>
+       <height>31</height>
       </rect>
      </property>
      <property name="font">
@@ -429,9 +429,9 @@ hr { height: 1px; border-width: 0; }
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>150</y>
+       <y>190</y>
        <width>101</width>
-       <height>24</height>
+       <height>31</height>
       </rect>
      </property>
      <property name="font">
@@ -448,6 +448,22 @@ hr { height: 1px; border-width: 0; }
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
+ <tabstops>
+  <tabstop>base_path</tabstop>
+  <tabstop>exec_path</tabstop>
+  <tabstop>attach_lldb</tabstop>
+  <tabstop>run_exec</tabstop>
+  <tabstop>stop_exec</tabstop>
+  <tabstop>step_into</tabstop>
+  <tabstop>step_over</tabstop>
+  <tabstop>continue_exec</tabstop>
+  <tabstop>add_breakpoint</tabstop>
+  <tabstop>delete_breakpoint</tabstop>
+  <tabstop>enable_breakpoint</tabstop>
+  <tabstop>disable_breakpoint</tabstop>
+  <tabstop>edit_breakpoint</tabstop>
+  <tabstop>breakpoints</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
